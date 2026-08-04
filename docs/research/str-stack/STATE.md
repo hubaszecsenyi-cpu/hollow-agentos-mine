@@ -1,27 +1,52 @@
 # Research run state
 
-Resume point for the STR direct-booking stack research. Update after every phase.
+Resume point for this research thread. Update after every phase.
 
-| Phase | Status | Output |
+## Current status: scope changed — playbook delivered
+
+The planned clean re-run of the STR research was **superseded**. The user
+reframed the deliverable: the short-term rental is one use case, and what they
+want is a general playbook for choosing tools when building custom software for
+small businesses.
+
+That reframe largely dissolved the Phase 0 blocker. Precise vendor pricing was
+load-bearing for an STR *buying* decision; in a playbook it is a footnote, and
+the findings that generalise best (Apple Guideline 4.2, CVE-2025-48757, Bubble's
+metering, the Lovable rendering change) were already verified against primary
+sources.
+
+## Deliverables
+
+| Document | Path | Status |
 |---|---|---|
-| 0 — Scope + reachability pre-test | **complete** | `00-scope.md` |
-| 1 — Search sweep (capped per angle) | not started | `01-search-*.md` |
-| 2 — Fetch + extract, batches of ~8 | not started | `02-claims-NN.md` |
-| 3 — Verify load-bearing claims | not started | `03-verdicts.md` |
-| 4 — Synthesis | not started | updated report |
+| Small business build playbook | `docs/research/small-business-build-playbook.html` | delivered, commit 94564a5 |
+| STR direct-booking report | `docs/research/str-direct-booking-stack-report.html` | delivered, commit 73ffedf |
+| Source reachability pre-test | `docs/research/str-stack/00-scope.md` | complete, commit 812ad77 |
 
-## Current status: BLOCKED at Phase 0
+## Phases of the abandoned clean re-run
 
-Egress policy blocks 15 of 16 priority sources; the scraper fallback is
-read-only in this session. A re-run can improve method and durability but not
-evidence quality. See "Blocker" in `00-scope.md`. Awaiting a decision on the
-four options listed there.
+| Phase | Status |
+|---|---|
+| 0 — Scope + reachability pre-test | complete — see `00-scope.md` |
+| 1 — Search sweep | not started, superseded |
+| 2 — Fetch + extract | not started, superseded |
+| 3 — Verify | not started, superseded |
+| 4 — Synthesis | delivered instead as the playbook |
 
-## Prior run, for reference
+## Still open, if the thread is picked up again
 
-The completed first-pass report lives at
-`docs/research/str-direct-booking-stack-report.html` (commit 73ffedf).
-Its raw agent results are in the session's workflow journal at
-`subagents/workflows/wf_00bd41a4-e4b/journal.jsonl` — **ephemeral**, lost when
-this container is reclaimed. 127 agent results, 48 sources, 73 verified claims.
-Nothing in this directory depends on that journal surviving.
+Constraints recorded in `00-scope.md` remain in force unless the environment
+changes:
+
+- 15 of 16 priority vendor domains blocked by egress policy
+- Ultimate Web Scraper is read-only in this session (`create_extractions: false`)
+  despite 9,686 credits being available
+- Consequently all pricing in both documents is banded, not quoted
+
+Unresolved factual gaps, all requiring vendor-page access:
+
+- Lodgify tier boundary — does the booking fee drop at the ~$40 tier or ~$103?
+- Guesty Lite — free for up to 3 listings, or ~$34 per listing?
+- NSW STRA registration fees and the 180-day cap detail (needs NSW Planning Portal)
+- Median / Natively pricing (current source is a competitor's page)
+- Retool, Softr, Glide, Noloco, FlutterFlow pricing never independently researched
