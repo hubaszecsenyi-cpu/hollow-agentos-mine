@@ -1,0 +1,574 @@
+<title>The Small Business Build Playbook</title>
+
+<style>
+  :root {
+    --paper:     #eef1f4;
+    --surface:   #ffffff;
+    --surface-2: #e0e6ec;
+    --line:      #c6d0da;
+    --line-soft: #dde4ea;
+    --text:      #1a2733;
+    --text-dim:  #566575;
+    --blue:      #2a5d8f;
+    --clay:      #a8412f;
+    --good:      #2d6a4a;
+    --warn:      #8a6117;
+    --bad:       #9c3a2a;
+    --good-bg:   #dcebe2;
+    --warn-bg:   #f3e8d0;
+    --bad-bg:    #f5dfda;
+    --blue-bg:   #dde8f2;
+
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:     #121a22;
+      --surface:   #1a242e;
+      --surface-2: #22303c;
+      --line:      #334554;
+      --line-soft: #2a3846;
+      --text:      #dde5ec;
+      --text-dim:  #93a3b3;
+      --blue:      #7cb0e0;
+      --clay:      #e08a72;
+      --good:      #7cc79c;
+      --warn:      #dcb35e;
+      --bad:       #e0897a;
+      --good-bg:   #17301f;
+      --warn-bg:   #33290f;
+      --bad-bg:    #33211d;
+      --blue-bg:   #1c2f42;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:     #121a22;
+    --surface:   #1a242e;
+    --surface-2: #22303c;
+    --line:      #334554;
+    --line-soft: #2a3846;
+    --text:      #dde5ec;
+    --text-dim:  #93a3b3;
+    --blue:      #7cb0e0;
+    --clay:      #e08a72;
+    --good:      #7cc79c;
+    --warn:      #dcb35e;
+    --bad:       #e0897a;
+    --good-bg:   #17301f;
+    --warn-bg:   #33290f;
+    --bad-bg:    #33211d;
+    --blue-bg:   #1c2f42;
+  }
+  :root[data-theme="light"] {
+    --paper:     #eef1f4;
+    --surface:   #ffffff;
+    --surface-2: #e0e6ec;
+    --line:      #c6d0da;
+    --line-soft: #dde4ea;
+    --text:      #1a2733;
+    --text-dim:  #566575;
+    --blue:      #2a5d8f;
+    --clay:      #a8412f;
+    --good:      #2d6a4a;
+    --warn:      #8a6117;
+    --bad:       #9c3a2a;
+    --good-bg:   #dcebe2;
+    --warn-bg:   #f3e8d0;
+    --bad-bg:    #f5dfda;
+    --blue-bg:   #dde8f2;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.62;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+  .prose { max-width: 43rem; }
+  .prose > * + * { margin-top: 1rem; }
+
+  h1, h2, h3, h4 { margin: 0; font-weight: 700; text-wrap: balance; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.08; }
+  h2 { font-size: clamp(1.4rem, 3vw, 1.8rem); line-height: 1.2; }
+  h3 { font-size: 1.12rem; letter-spacing: -0.01em; }
+  h4 { font-size: 0.95rem; letter-spacing: 0; }
+  p { margin: 0; }
+
+  a { color: var(--blue); text-underline-offset: 2px; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  header.masthead {
+    display: flex; flex-direction: column; gap: 0.9rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .standfirst {
+    font-family: var(--serif);
+    font-size: 1.18rem; line-height: 1.55;
+    color: var(--text-dim); max-width: 41rem;
+  }
+
+  /* Principle band */
+  .principle {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--clay);
+    padding: 1.6rem 1.75rem;
+    display: flex; flex-direction: column; gap: 0.7rem;
+  }
+  .principle p {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    line-height: 1.5;
+  }
+
+  /* Triage steps — numbering is real: each gates the next */
+  .steps { display: flex; flex-direction: column; gap: 1rem; counter-reset: step; }
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.25rem 1.4rem 1.25rem 3.6rem;
+    position: relative;
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute; left: 1.25rem; top: 1.2rem;
+    font-family: var(--mono); font-size: 0.95rem; font-weight: 700;
+    color: var(--clay);
+    border: 1px solid var(--line); border-radius: 50%;
+    width: 1.6rem; height: 1.6rem;
+    display: grid; place-items: center;
+  }
+  .step h3 { margin-bottom: 0.35rem; }
+  .step p { font-size: 0.94rem; color: var(--text-dim); }
+  .step .answer {
+    margin-top: 0.6rem; font-size: 0.9rem;
+    padding-top: 0.6rem; border-top: 1px dashed var(--line-soft);
+  }
+  .step .answer strong { color: var(--text); }
+
+  /* Chips */
+  .chip {
+    display: inline-block; font-family: var(--mono);
+    font-size: 0.67rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.15rem 0.45rem; white-space: nowrap; vertical-align: 0.08em;
+  }
+  .chip-good { background: var(--good-bg); color: var(--good); }
+  .chip-warn { background: var(--warn-bg); color: var(--warn); }
+  .chip-bad  { background: var(--bad-bg);  color: var(--bad); }
+  .chip-info { background: var(--blue-bg); color: var(--blue); }
+  .chip-n    { background: var(--surface-2); color: var(--text-dim); }
+
+  /* Tables */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 42rem; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  thead th {
+    font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-dim);
+    background: var(--surface-2); white-space: nowrap;
+    border-bottom: 1px solid var(--line);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.name { font-weight: 650; white-space: nowrap; }
+  td.num { font-family: var(--mono); font-size: 0.81rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* Archetype cards */
+  .arch { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--line);
+    padding: 1.3rem; display: flex; flex-direction: column; gap: 0.7rem;
+  }
+  .card .label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--clay); }
+  .card ul { margin: 0; padding-left: 1.05rem; font-size: 0.87rem; color: var(--text-dim); display: flex; flex-direction: column; gap: 0.3rem; }
+  .card .pick { font-size: 0.9rem; padding-top: 0.65rem; border-top: 1px solid var(--line-soft); }
+  .card .pick strong { color: var(--text); }
+
+  .callout {
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 3px solid var(--blue); padding: 1.1rem 1.3rem; font-size: 0.93rem;
+  }
+  .callout.danger { border-left-color: var(--clay); }
+  .callout .eyebrow { display: block; margin-bottom: 0.45rem; color: var(--blue); }
+  .callout.danger .eyebrow { color: var(--clay); }
+
+  blockquote {
+    margin: 0; padding: 0.7rem 1.15rem; border-left: 2px solid var(--line);
+    font-family: var(--serif); font-style: italic; color: var(--text-dim); font-size: 0.97rem;
+  }
+
+  ul.tight { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.45rem; }
+  ol.tight { margin: 0; padding-left: 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+
+  details { border-top: 1px solid var(--line-soft); padding: 0.85rem 0; }
+  summary { cursor: pointer; font-weight: 650; font-size: 0.93rem; }
+  details > *:not(summary) { margin-top: 0.75rem; font-size: 0.89rem; color: var(--text-dim); }
+
+  .footnote { font-size: 0.82rem; color: var(--text-dim); }
+
+  @media (max-width: 40rem) {
+    body { font-size: 16px; }
+    .wrap { padding: 2.25rem 1.05rem 4rem; gap: 2.5rem; }
+    .step { padding: 1.1rem 1.1rem 1.1rem 3.2rem; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <span class="eyebrow">Field guide &middot; Revision 1 &middot; August 2026</span>
+    <h1>The small business build playbook</h1>
+    <p class="standfirst">Which tool to reach for when a small business needs custom software — web apps, mobile apps, internal tools, public sites. Written for someone who prompts AI fluently and doesn't write code, and who has to live with the consequences of the choice.</p>
+  </header>
+
+  <div class="principle">
+    <span class="eyebrow">The one rule</span>
+    <p>Build the thing that makes the business different. Buy everything else — especially anything that, when it breaks, costs the client money or puts them in front of a regulator.</p>
+    <p class="footnote">Almost every expensive mistake in this space is a violation of that sentence. Someone rebuilds bookings, invoicing, rostering or payments in an AI builder because the demo looked easy, then spends six months maintaining a worse version of a product that costs $30 a month.</p>
+  </div>
+
+  <section class="prose">
+    <span class="eyebrow">Before the tools</span>
+    <h2>Triage, in order</h2>
+    <p>Tool choice is the fourth question, not the first. Work through these in sequence — each one gates the next, and most projects die on question two.</p>
+  </section>
+
+  <div class="steps">
+    <div class="step">
+      <h3>Does this software need to exist?</h3>
+      <p>A large share of small-business "app" requests are a spreadsheet problem, a settings change in software they already pay for, or a process problem that software will encode rather than fix.</p>
+      <p class="answer"><strong>Kill criterion:</strong> if you can't name the specific decision or task the software removes, stop. Build nothing.</p>
+    </div>
+    <div class="step">
+      <h3>Does it already exist as a product?</h3>
+      <p>Bookings, invoicing, CRM, rostering, e-signature, inventory, email, payments, scheduling, forms. These are mature categories with $10–50/month products that have absorbed a decade of edge cases you have not thought of.</p>
+      <p class="answer"><strong>Kill criterion:</strong> if a product covers 80% of it, buy the product and build only the missing 20% around it. Integration beats reimplementation nearly every time.</p>
+    </div>
+    <div class="step">
+      <h3>What kind of software is it, really?</h3>
+      <p>There are four archetypes and they have almost nothing in common technically. Getting this wrong is what makes people pick a tool that fights them for months. See the next section.</p>
+      <p class="answer"><strong>Test:</strong> who uses it, how often, do strangers find it through Google, and does it touch money or personal data?</p>
+    </div>
+    <div class="step">
+      <h3>Who owns it in two years?</h3>
+      <p>Ask this before you write a prompt, not at handover. Can the client take it elsewhere? Can you walk away? Can a different developer pick it up? Some tools give you a real codebase; others hold your work hostage in a proprietary editor.</p>
+      <p class="answer"><strong>For client work this is the deciding criterion</strong>, ahead of price and ahead of build speed.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="prose" style="margin-bottom:1.4rem">
+      <span class="eyebrow">Question three, expanded</span>
+      <h2>The four archetypes</h2>
+      <p>Sort the project into one of these before choosing anything. The right tool for a public marketing site is close to the worst tool for an internal ops app.</p>
+    </div>
+    <div class="arch">
+      <div class="card">
+        <span class="label">Archetype A</span>
+        <h3>Public site</h3>
+        <ul>
+          <li>Strangers arrive from Google</li>
+          <li>SEO and page speed are the product</li>
+          <li>Content changes often, logic is thin</li>
+          <li>No login for most visitors</li>
+        </ul>
+        <p class="pick"><strong>Reach for:</strong> Webflow or Framer. Lovable is now viable too — it gained real server-side rendering in May 2026, which was the thing that used to disqualify it here.</p>
+      </div>
+      <div class="card">
+        <span class="label">Archetype B</span>
+        <h3>Internal tool</h3>
+        <ul>
+          <li>Staff only, known users, everyone logs in</li>
+          <li>SEO irrelevant, rendering irrelevant</li>
+          <li>CRUD, forms, dashboards, approvals</li>
+          <li>Ugly-but-working is acceptable</li>
+        </ul>
+        <p class="pick"><strong>Reach for:</strong> Lovable, Bolt or Replit for something bespoke; Softr, Glide or Noloco over Airtable when the data model is simple; Retool for data-heavy admin.</p>
+      </div>
+      <div class="card">
+        <span class="label">Archetype C</span>
+        <h3>Customer-facing transactional</h3>
+        <ul>
+          <li>Strangers create accounts and pay you</li>
+          <li>Holds personal data, payment records</li>
+          <li>Multi-user state, race conditions, refunds</li>
+          <li>Failure has financial or legal cost</li>
+        </ul>
+        <p class="pick"><strong>Reach for:</strong> a bought engine wherever the category exists. Where it doesn't, this is the archetype that justifies real code — Claude Code or Cursor with Next.js. <span class="chip chip-bad">Highest risk</span></p>
+      </div>
+      <div class="card">
+        <span class="label">Archetype D</span>
+        <h3>Native mobile</h3>
+        <ul>
+          <li>Genuinely needs the device, not the browser</li>
+          <li>Used repeatedly by the same people</li>
+          <li>Store listing actually matters</li>
+          <li>Offline, background, or hardware access</li>
+        </ul>
+        <p class="pick"><strong>Reach for:</strong> FlutterFlow, Bubble's mobile track, or Expo. But first read the mobile section — most requests that arrive here belong in A or B.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose" style="margin-bottom:1.4rem">
+      <span class="eyebrow">The shortlist</span>
+      <h2>Tools, and what each is actually for</h2>
+      <p class="footnote"><span class="chip chip-warn">Pricing caution</span> Figures are bands, not quotes. Vendor pricing pages were unreachable from the research environment, so treat these as order-of-magnitude for shortlisting and confirm before you commit or quote a client.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>Best archetype</th>
+            <th class="num">Cost band</th>
+            <th>Billing model</th>
+            <th>Own the code?</th>
+            <th>Watch out for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Lovable</td>
+            <td>A, B</td>
+            <td class="num">~$25/mo</td>
+            <td>AI credits</td>
+            <td><span class="chip chip-good">Yes</span> GitHub export</td>
+            <td>Credits burn fast on complex logic. Check database access rules yourself.</td>
+          </tr>
+          <tr>
+            <td class="name">Bolt / v0 / Replit</td>
+            <td>A, B</td>
+            <td class="num">~$20–25/mo</td>
+            <td>AI credits</td>
+            <td><span class="chip chip-good">Yes</span></td>
+            <td>Same class as Lovable. v0 and Bolt are front-end first.</td>
+          </tr>
+          <tr>
+            <td class="name">Bubble</td>
+            <td>B, C, D</td>
+            <td class="num">~$29–350/mo</td>
+            <td>Seat + metered compute</td>
+            <td><span class="chip chip-bad">No export</span></td>
+            <td>Workload units meter every operation and overage is uncapped. Months to learn. Real native apps, though.</td>
+          </tr>
+          <tr>
+            <td class="name">Webflow</td>
+            <td>A</td>
+            <td class="num">~$15–25/mo</td>
+            <td>Flat per site</td>
+            <td><span class="chip chip-warn">Partial</span> HTML/CSS</td>
+            <td>Excellent SEO control. Weak for app logic — don't stretch it.</td>
+          </tr>
+          <tr>
+            <td class="name">Framer</td>
+            <td>A</td>
+            <td class="num">~$15–25/mo</td>
+            <td>Flat per site</td>
+            <td><span class="chip chip-bad">Limited</span></td>
+            <td>Fastest route to a site that looks designed. Lock-in is real but the asset is cheap to rebuild.</td>
+          </tr>
+          <tr>
+            <td class="name">Softr / Glide / Noloco</td>
+            <td>B</td>
+            <td class="num">~$25–90/mo</td>
+            <td>Seat / per-app</td>
+            <td><span class="chip chip-bad">No</span></td>
+            <td>Superb when the data really is a table. Ceiling arrives abruptly.</td>
+          </tr>
+          <tr>
+            <td class="name">Retool</td>
+            <td>B</td>
+            <td class="num">per-seat, scales</td>
+            <td>Per user</td>
+            <td><span class="chip chip-bad">No</span></td>
+            <td>Internal admin over existing databases. Per-seat cost punishes wide rollouts.</td>
+          </tr>
+          <tr>
+            <td class="name">FlutterFlow</td>
+            <td>D</td>
+            <td class="num">~$30–70/mo</td>
+            <td>Seat</td>
+            <td><span class="chip chip-good">Yes</span> Flutter source</td>
+            <td>Genuine compiled native output. Poor choice for public marketing sites.</td>
+          </tr>
+          <tr>
+            <td class="name">Claude Code / Cursor<br>+ Next.js</td>
+            <td>A, C, D</td>
+            <td class="num">~$20–100/mo</td>
+            <td>Subscription</td>
+            <td><span class="chip chip-good">Total</span></td>
+            <td>Highest ceiling and lowest running cost. You now own deployment, security and maintenance.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">The expensive misunderstanding</span>
+    <h2>How these tools actually bill you</h2>
+    <p>Three billing models, and the difference matters more than the headline price — particularly if you quote clients fixed prices.</p>
+    <ul class="tight">
+      <li><strong>Flat subscription</strong> (Webflow, Framer, most site builders). Predictable. Quote with confidence.</li>
+      <li><strong>AI credits</strong> (Lovable, Bolt, Replit). You pay per generation attempt, not per result. The failure mode is a debugging loop where each fix breaks something adjacent and every retry costs. A modest app with authentication and a database can consume more than a month's allowance in one build session. Top-ups typically cost roughly double the in-plan rate.</li>
+      <li><strong>Metered compute</strong> (Bubble's workload units). Every database read, workflow step and API call is billed, and overage is uncapped by default. Background work — polling, webhooks, scheduled syncs — accrues cost around the clock whether anyone uses the app or not.</li>
+    </ul>
+    <div class="callout danger">
+      <span class="eyebrow">If you bill clients fixed-price</span>
+      Metered compute transfers an unbounded variable cost onto a fixed-price engagement. Either put the subscription in the client's name so the meter is theirs, or price in a ceiling. The same applies to AI credits during the build: a difficult feature can quietly consume the project's entire tooling budget before it works.
+    </div>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">Archetype D, interrogated</span>
+    <h2>The mobile app question</h2>
+    <p>When a small business says "we need an app," they almost always mean "we need to work properly on phones." Those are different projects with a tenfold cost difference. Establish which one before agreeing to anything.</p>
+
+    <h3>The default answer is a PWA</h3>
+    <p>A progressive web app installs to the home screen, works offline, sends push notifications on both platforms, and costs nothing beyond the web build you were doing anyway. It keeps SEO and link sharing intact. For staff tools and for customers who transact occasionally, this is almost always correct.</p>
+
+    <h3>What actually justifies going native</h3>
+    <ul class="tight">
+      <li>Background location tracking, or continuous GPS while the screen is off</li>
+      <li>Reliable offline-first use in the field, with sync on reconnect</li>
+      <li>Deep hardware access — advanced camera control, BLE, NFC, biometrics</li>
+      <li>Push notifications as the core product loop, not a nicety</li>
+      <li>The client's customers genuinely expect a store listing and will search for one</li>
+    </ul>
+    <p>One of these, and native is defensible. None of them, and you are paying a large premium for an icon on a home screen.</p>
+
+    <div class="callout danger">
+      <span class="eyebrow">Apple will reject a wrapped website — this is the exact wording</span>
+      Guideline 4.2, Minimum Functionality: <em>"Your app should include features, content, and UI that elevate it beyond a repackaged website. If your app is not particularly useful, unique, or 'app-like,' it doesn't belong on the App Store."</em> And 4.2.2: <em>"Other than catalogs, apps shouldn't primarily be marketing materials, advertisements, web clippings, content aggregators, or a collection of links."</em>
+      <br><br>
+      <span class="chip chip-good">Verified</span> Fetched from developer.apple.com on 4 August 2026. Rejections under this clause were still being issued and appealed on Apple's developer forums as recently as April 2026, including against apps whose developers had added genuine native features. Apple does not tell you what would satisfy the rule.
+    </div>
+
+    <h3>If you need a store listing anyway</h3>
+    <ol class="tight">
+      <li><strong>Capacitor</strong> — free and open source. Wrap your existing web app, get real native APIs, manage builds and signing yourself.</li>
+      <li><strong>Median.co or Natively</strong> — paid wrapper services, roughly $30/month self-serve up to low thousands for full-service submission. Median publicly claims a very high approval rate; that's a vendor claim, but it suggests a well-configured wrapper with native navigation and push usually clears review.</li>
+      <li><strong>Rebuild natively</strong> — FlutterFlow, Bubble's mobile track, or Expo. The only option that removes 4.2 risk entirely.</li>
+      <li><strong>Store fees regardless</strong> — Apple Developer Program $99/year, Google Play $25 one-time.</li>
+    </ol>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">The part that bites later</span>
+    <h2>Ownership, lock-in and handover</h2>
+    <p>For client work this outranks everything else. You are not only choosing how to build — you are choosing what the client is left holding when the relationship ends, amicably or otherwise.</p>
+    <ul class="tight">
+      <li><strong>Real code export</strong> (Lovable, Bolt, Replit, FlutterFlow, Claude Code). The client can be handed a repository. Another developer can continue. You can migrate to a different platform without a rewrite. This is the honest position to be in.</li>
+      <li><strong>No export</strong> (Bubble, Glide, Softr, Retool). The work exists only inside the vendor. If the client stops paying, it stops existing. If they want to leave, it's a rebuild. This can still be the right call for a genuinely internal tool — but say so explicitly, in writing, before you start.</li>
+    </ul>
+    <blockquote>Tell the client which of these they're buying. "You'll own the code" and "you'll own an account" are very different products, and only one of them survives a billing dispute.</blockquote>
+    <p>Two practical habits: put SaaS subscriptions in the client's name with you as a collaborator, so nothing dies when your card expires or the engagement ends. And commit generated code to a repository the client controls from day one, not at handover.</p>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">Non-negotiable</span>
+    <h2>The security pass</h2>
+    <p>AI builders scaffold authentication that looks finished. The recurring, documented failure is that database access rules are generated incompletely or not at all — the app works perfectly because the rules protecting it were never switched on.</p>
+    <p><span class="chip chip-good">Verified</span> The reference case is CVE-2025-48757, disclosed May 2025: a scan of 1,645 AI-generated projects found 303 endpoints across 170 of them — 10.3% — where database tables could be read by unauthenticated requests, because row-level security was never enabled. CVSS 9.3.</p>
+    <p>The generalisable lesson isn't about one vendor. It's that <strong>"the AI set it up" is not a security posture</strong>, and for client work it's not a defence either. Before anything holding customer data goes live:</p>
+    <ul class="tight">
+      <li>Open the database dashboard and confirm access rules exist on <em>every</em> table, not just the obvious ones</li>
+      <li>Try to read a table while logged out. Actually try it.</li>
+      <li>Confirm no admin or service key is present in client-side code</li>
+      <li>Confirm secrets sit in server-side environment variables, not in the front end</li>
+      <li>Check what the app emails, logs and exports — leaks are as often in a CSV as in a database</li>
+    </ul>
+    <div class="callout">
+      <span class="eyebrow">The structural fix</span>
+      Wherever a bought product can hold the sensitive data instead of you, let it. If customer records live in an established CRM or booking platform rather than a database you scaffolded in an afternoon, their security team carries the risk instead of yours. This is the strongest argument for the buy side of the build-versus-buy call, and it has nothing to do with saving development time.
+    </div>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">Worked example</span>
+    <h2>A short-term rental direct booking business</h2>
+    <p>Running one real project through the playbook, since abstractions hide the interesting decisions. A single Sydney holiday rental wanting direct bookings to escape platform commission, plus a request for iOS and Android apps.</p>
+    <ul class="tight">
+      <li><strong>Q1, should it exist?</strong> Yes — the commission saved is the whole business case.</li>
+      <li><strong>Q2, does it exist already?</strong> Partly, and this is the pivotal answer. The booking engine — availability, calendar sync with listing platforms, minimum stays, deposits, damage holds, guest messaging — is a mature $16–40/month category. Building it means owning double-booking risk forever.</li>
+      <li><strong>Q3, which archetype?</strong> Both A and C, which is why it's confusing. The marketing site is Archetype A and should be built. The booking flow is Archetype C and should be bought. Splitting them is the whole answer.</li>
+      <li><strong>Q4, ownership?</strong> Owner-operated, so lock-in matters less than usual — but the marketing site is the SEO asset and should sit somewhere portable.</li>
+      <li><strong>Mobile?</strong> No triggering requirement. Guests book once a year and will never install an app; a wrapped booking site is exactly what Guideline 4.2 targets. PWA.</li>
+    </ul>
+    <p><strong>Resulting stack:</strong> a built marketing site, a bought booking engine, the operator's own payment account, and no native apps — around US$65/month. The one thing genuinely worth custom-building turned out to be a compliance tracker for a local 180-day letting cap, because no product in the category does it.</p>
+    <p class="footnote">Full analysis with costed alternatives: <code>docs/research/str-direct-booking-stack-report.html</code></p>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">Reference</span>
+    <h2>Ten-second version</h2>
+    <ol class="tight">
+      <li>Public site with SEO → Webflow, Framer, or Lovable</li>
+      <li>Internal staff tool → Lovable, Bolt, or Softr over a table</li>
+      <li>Customers paying money → buy the engine; build only what's missing</li>
+      <li>"We need an app" → PWA until something forces native</li>
+      <li>Client work → code export is non-negotiable</li>
+      <li>Fixed-price engagement → avoid metered compute, or make the meter theirs</li>
+      <li>Anything holding customer data → do the security pass before launch</li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="prose" style="margin-bottom:1rem">
+      <span class="eyebrow">Appendix</span>
+      <h2>Confidence and limits</h2>
+    </div>
+    <div>
+      <details>
+        <summary>What's verified against primary sources</summary>
+        <ul class="tight">
+          <li>Apple App Review Guidelines 4.2 and 4.2.2 — fetched from developer.apple.com, 4 August 2026.</li>
+          <li>CVE-2025-48757 — GitHub Advisory GHSA-773x-pxjg-gxgx, CVSS 9.3, published 30 May 2025.</li>
+          <li>Lovable gained server-side rendering on 13 May 2026 (TanStack Start for new projects, automatic pre-rendering for existing ones).</li>
+          <li>Bubble's workload-unit metering and uncapped overage — Bubble's own documentation.</li>
+          <li>Bubble publishes genuine native apps via React Native, not a web view.</li>
+          <li>Bubble has no source-code export.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>What's banded rather than quoted</summary>
+        <p>All pricing. Vendor pricing pages were unreachable from the research environment — 15 of 16 priority domains were blocked by network policy — so costs are order-of-magnitude bands assembled from secondary sources. They're sufficient for shortlisting and insufficient for quoting. Confirm on the vendor's own page before committing.</p>
+      </details>
+      <details>
+        <summary>Known gaps</summary>
+        <ul class="tight">
+          <li>Retool, Softr, Glide, Noloco and FlutterFlow pricing were not independently researched; those rows draw on general knowledge.</li>
+          <li>No hands-on testing. This is documentary research plus judgement, not benchmarks.</li>
+          <li>The AI builder market moves fast enough that anything here older than about six months deserves re-checking — the Lovable rendering change invalidated a year of published advice in a single release.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+</div>
