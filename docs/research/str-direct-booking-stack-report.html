@@ -1,0 +1,671 @@
+<title>Direct Booking Stack: Lovable vs the Alternatives</title>
+
+<style>
+  :root {
+    --ink:        #0f1e24;
+    --paper:      #f1f5f4;
+    --surface:    #ffffff;
+    --surface-2:  #e7eeec;
+    --line:       #cfdbd8;
+    --text:       #16272d;
+    --text-dim:   #55696e;
+    --teal:       #1a6a66;
+    --teal-soft:  #d8e8e5;
+    --brass:      #9a6b23;
+    --brass-soft: #f2e6cf;
+    --good:       #2c6b4a;
+    --warn:       #8a6413;
+    --bad:        #8f3830;
+    --good-bg:    #dcebe1;
+    --warn-bg:    #f4e9cf;
+    --bad-bg:     #f4dedb;
+
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:      #0d181d;
+      --surface:    #14232a;
+      --surface-2:  #1b2f37;
+      --line:       #294049;
+      --text:       #dfe9e8;
+      --text-dim:   #93a8ac;
+      --teal:       #6fc0b6;
+      --teal-soft:  #1a3a3c;
+      --brass:      #d8a860;
+      --brass-soft: #332815;
+      --good:       #7fc79b;
+      --warn:       #d9b45f;
+      --bad:        #e08a7f;
+      --good-bg:    #17301f;
+      --warn-bg:    #33290f;
+      --bad-bg:     #34201d;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0d181d;
+    --surface:    #14232a;
+    --surface-2:  #1b2f37;
+    --line:       #294049;
+    --text:       #dfe9e8;
+    --text-dim:   #93a8ac;
+    --teal:       #6fc0b6;
+    --teal-soft:  #1a3a3c;
+    --brass:      #d8a860;
+    --good:       #7fc79b;
+    --warn:       #d9b45f;
+    --bad:        #e08a7f;
+    --good-bg:    #17301f;
+    --warn-bg:    #33290f;
+    --bad-bg:     #34201d;
+  }
+
+  :root[data-theme="light"] {
+    --paper:      #f1f5f4;
+    --surface:    #ffffff;
+    --surface-2:  #e7eeec;
+    --line:       #cfdbd8;
+    --text:       #16272d;
+    --text-dim:   #55696e;
+    --teal:       #1a6a66;
+    --brass:      #9a6b23;
+    --good:       #2c6b4a;
+    --warn:       #8a6413;
+    --bad:        #8f3830;
+    --good-bg:    #dcebe1;
+    --warn-bg:    #f4e9cf;
+    --bad-bg:     #f4dedb;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  .prose { max-width: 42rem; }
+
+  h1, h2, h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  h1 { font-size: clamp(2.1rem, 5vw, 3.1rem); line-height: 1.1; }
+  h2 { font-size: clamp(1.5rem, 3vw, 1.95rem); line-height: 1.2; }
+  h3 { font-size: 1.2rem; line-height: 1.3; }
+
+  p { margin: 0; }
+  section > .prose > * + * { margin-top: 1.1rem; }
+
+  a { color: var(--teal); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  header.masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-bottom: 3px double var(--line);
+    padding-bottom: 2rem;
+  }
+  .standfirst {
+    font-family: var(--serif);
+    font-size: 1.22rem;
+    line-height: 1.55;
+    color: var(--text-dim);
+    max-width: 40rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  /* Verdict panel */
+  .verdict {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--teal);
+    border-radius: 3px;
+    padding: 1.75rem 1.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+  .verdict ol {
+    margin: 0;
+    padding-left: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .verdict li::marker { color: var(--brass); font-family: var(--mono); font-size: 0.85rem; }
+  .verdict strong { color: var(--text); }
+
+  /* Chips */
+  .chip {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.16rem 0.5rem;
+    border-radius: 2px;
+    white-space: nowrap;
+    vertical-align: 0.08em;
+  }
+  .chip-good { background: var(--good-bg); color: var(--good); }
+  .chip-warn { background: var(--warn-bg); color: var(--warn); }
+  .chip-bad  { background: var(--bad-bg);  color: var(--bad); }
+  .chip-neutral { background: var(--surface-2); color: var(--text-dim); }
+
+  /* Tables */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--surface);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 40rem;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  thead th {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.83rem; white-space: nowrap; }
+  td.name { font-weight: 600; white-space: nowrap; }
+
+  /* Stack cards */
+  .stacks { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+  .stack {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .stack.pick { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal); }
+  .stack h3 { font-size: 1.08rem; }
+  .stack ul { margin: 0; padding-left: 1.1rem; font-size: 0.88rem; color: var(--text-dim); display: flex; flex-direction: column; gap: 0.35rem; }
+  .price {
+    font-family: var(--mono);
+    font-size: 1.45rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--brass);
+    line-height: 1;
+  }
+  .price small { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.04em; }
+
+  /* Callout */
+  .callout {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--brass);
+    background: var(--surface);
+    padding: 1.15rem 1.35rem;
+    border-radius: 3px;
+    font-size: 0.94rem;
+  }
+  .callout .eyebrow { display: block; margin-bottom: 0.5rem; color: var(--brass); }
+
+  blockquote {
+    margin: 0;
+    padding: 0.85rem 1.25rem;
+    border-left: 2px solid var(--line);
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 0.98rem;
+  }
+
+  details {
+    border-top: 1px solid var(--line);
+    padding: 0.9rem 0;
+  }
+  summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+  details > *:not(summary) { margin-top: 0.8rem; font-size: 0.9rem; color: var(--text-dim); }
+
+  .footnote { font-size: 0.83rem; color: var(--text-dim); }
+  ul.tight { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+
+  hr.rule { border: none; border-top: 1px solid var(--line); margin: 0; }
+
+  @media (max-width: 40rem) {
+    body { font-size: 16px; }
+    .wrap { padding: 2.5rem 1.1rem 4rem; gap: 2.75rem; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <span class="eyebrow">Decision report &middot; Short-term rental tooling</span>
+    <h1>What to build your direct booking business on</h1>
+    <p class="standfirst">A single Sydney short-term rental, a solo non-developer operator, Stripe payments, and a wish for real App Store listings. Lovable, Bubble, and fourteen other ways to spend money — and the one structural decision that matters more than the tool choice.</p>
+    <div class="meta-row">
+      <span>Prepared 4 August 2026</span>
+      <span>48 sources fetched &middot; 73 claims adversarially verified</span>
+      <span>Prices in USD unless marked</span>
+    </div>
+  </header>
+
+  <section class="verdict">
+    <span class="eyebrow">The short answer</span>
+    <ol>
+      <li><strong>Don't build the booking engine.</strong> Availability, two-way channel sync, min-stay rules, deposits, damage holds and guest messaging are a solved, mature, cheap product category. Building that yourself means reinventing a $40/month product and owning double-booking risk forever.</li>
+      <li><strong>Your doubt about Lovable is half right, but the popular reason is out of date.</strong> The widely-cited "Lovable sites can't rank in Google" problem was fixed on 13 May 2026. The real reasons to limit Lovable's role are different, and they're below.</li>
+      <li><strong>Native iOS and Android apps are the wrong investment for a one-property direct booking business.</strong> Not because they're hard — because guests book once a year and will never install an app. Details, costs and the path anyway if you still want it, in section 5.</li>
+      <li><strong>Recommended stack: a booking engine you buy, a marketing site you build, and your own Stripe account.</strong> Roughly <strong>US$65/month</strong>, about <strong>A$100</strong>. The one thing genuinely worth custom-building is a NSW 180-day compliance tracker, which no PMS does for you.</li>
+    </ol>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">1 &middot; Correcting the premise</span>
+    <h2>What changed while you weren't looking</h2>
+    <p>Most of what's written online about Lovable and SEO — including articles published as recently as April 2026 — describes a product that no longer exists. It's worth clearing this up first, because it's probably part of why you're losing confidence.</p>
+    <p>The old complaint was architectural and real: Lovable generated client-side-rendered React single-page apps, so a crawler requesting the page got an empty HTML shell. For a business whose entire economic case is ranking for <em>"Bondi apartment direct booking"</em> and escaping Airbnb's commission, that would be disqualifying.</p>
+    <p>On <strong>13 May 2026</strong> Lovable shipped a release called Discoverability. New projects are built on TanStack Start with real server-side rendering — every request returns fully rendered HTML to humans and crawlers alike. Existing React and Vite projects get automatic pre-rendering: static HTML snapshots served to verified crawlers, including Google, Bing, social preview bots, and AI crawlers like ChatGPT, Perplexity and Claude.</p>
+    <div class="callout">
+      <span class="eyebrow">Verification note</span>
+      This was the single most consequential finding in the research, and it <em>reversed</em> three separate sourced claims that had survived initial fetching. Adversarial checking killed them on recency grounds. If you read an article dated before mid-May 2026 telling you Lovable needs a paid pre-rendering service like Prerender.io, that advice is now obsolete.
+    </div>
+    <p>One caveat that matters for you specifically: <strong>your existing StaffRollCall project predates the cutoff</strong>, so it's on the older stack getting pre-rendering rather than true SSR. Lovable documents an upgrade path to TanStack Start. For a new booking site, you'd start on the new stack by default.</p>
+    <p>A related claim also worth discarding: several sources repeat an Onely statistic that JavaScript pages take "9x longer" to index and lose 40% of indexation. Verification found Google's own Search Relations guidance puts the median crawl-to-render delay at roughly five seconds. The figure is stale conference research, not a current constraint.</p>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">2 &middot; The decision that dominates all others</span>
+    <h2>Buy the booking engine. Build the website.</h2>
+    <p>Almost everyone approaching this problem frames it as "which builder should I use?" That's the second question. The first is which half of the system you're building at all.</p>
+    <p>A direct booking site has two halves with completely different economics:</p>
+    <ul class="tight">
+      <li><strong>The marketing site</strong> — photography, the story of the property, the neighbourhood guide, location pages, trust signals, structured data. This is design work. It's genuinely differentiating, it's where SEO lives, and it's a good fit for an AI builder.</li>
+      <li><strong>The booking engine</strong> — a live availability calendar, two-way sync with Airbnb, Booking.com and Vrbo, minimum-stay and seasonal pricing rules, deposits and damage holds, guest messaging, rental agreements, turnover scheduling. This is undifferentiated infrastructure. It is also <em>merciless</em>: a sync bug means a double booking, and a double booking on Airbnb costs you money and search ranking on the platform you're trying to escape.</li>
+    </ul>
+    <p>You can buy the second half for roughly US$16–40 per month. Rebuilding it in Lovable or Bubble means months of iteration on the exact class of logic — multi-user state, payment flows, calendar edge cases — where AI builders are weakest and burn the most credits.</p>
+    <p>There's a security dimension too, and it's specific rather than hand-wavy. <span class="chip chip-good">Verified</span> In May 2025, researcher Matt Palmer disclosed <strong>CVE-2025-48757</strong>: a scan of 1,645 Lovable projects found 303 endpoints across 170 projects — 10.3% — where Supabase tables were readable by unauthenticated requests using the public anon key, because Row Level Security was never enabled. The CVE carries a CVSS score of 9.3 and is registered as GitHub Advisory GHSA-773x-pxjg-gxgx. Lovable disputes the classification, arguing each generated app is a customer's own artifact.</p>
+    <p>Take the dispute at face value and the practical conclusion is unchanged: whether or not it's Lovable's fault, a self-built guest database is <em>your</em> Privacy Act exposure, holding guest names, addresses, stay dates and payment metadata. If the guest data lives in OwnerRez or Lodgify instead, that's their compliance problem and their security team. For a solo operator, that is the single best risk trade available.</p>
+    <blockquote>The rule of thumb: build the half that makes you money, buy the half that can lose it for you.</blockquote>
+  </section>
+
+  <section>
+    <div class="prose" style="margin-bottom:1.5rem">
+      <span class="eyebrow">3 &middot; The builders</span>
+      <h2>Lovable, Bubble, and the rest</h2>
+      <p>Assessed for this job — a marketing site in front of a bought booking engine — rather than in the abstract.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th class="num">Entry price</th>
+            <th>SEO / rendering</th>
+            <th>Native apps</th>
+            <th>Own your code</th>
+            <th>Verdict for this job</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Lovable</td>
+            <td class="num">$25/mo Pro<br><small>100 credits</small></td>
+            <td>SSR since May 2026 <span class="chip chip-good">Fixed</span></td>
+            <td>None natively — needs a wrapper</td>
+            <td>Yes, GitHub export</td>
+            <td>Fine for the site. Not for booking logic.</td>
+          </tr>
+          <tr>
+            <td class="name">Bubble</td>
+            <td class="num">$29/mo web<br>$59/mo web+mobile</td>
+            <td>No SSR — weak for public sites</td>
+            <td>Yes — real React Native <span class="chip chip-warn">Beta</span></td>
+            <td>No export at all</td>
+            <td>Worse SEO than Lovable, harder to learn, locked in.</td>
+          </tr>
+          <tr>
+            <td class="name">Webflow</td>
+            <td class="num">~$14–23/mo</td>
+            <td>Excellent — static/SSR, full head control</td>
+            <td>No</td>
+            <td>Export HTML/CSS</td>
+            <td>Strong choice for the marketing site.</td>
+          </tr>
+          <tr>
+            <td class="name">Framer</td>
+            <td class="num">~$15–25/mo</td>
+            <td>Excellent — fast, SEO-clean</td>
+            <td>No</td>
+            <td>Limited</td>
+            <td>Best design-per-hour if you don't want to code.</td>
+          </tr>
+          <tr>
+            <td class="name">FlutterFlow</td>
+            <td class="num">~$30–70/mo</td>
+            <td>Poor for marketing sites</td>
+            <td>Yes — true compiled native</td>
+            <td>Yes, Flutter source</td>
+            <td>Only if native apps are genuinely required.</td>
+          </tr>
+          <tr>
+            <td class="name">Bolt / v0 / Replit</td>
+            <td class="num">$20–25/mo</td>
+            <td>Varies; v0 and Bolt are front-end first</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>Same class as Lovable. No reason to switch.</td>
+          </tr>
+          <tr>
+            <td class="name">Claude Code / Cursor<br>+ Next.js</td>
+            <td class="num">$20–100/mo</td>
+            <td>Best possible — full control</td>
+            <td>Via Expo / React Native</td>
+            <td>Total</td>
+            <td>Highest ceiling, steepest curve. Realistic later, not now.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose" style="margin-top:2rem">
+      <h3>On Lovable's credit model</h3>
+      <p>The complaint that <em>is</em> still valid concerns cost predictability. Lovable's Pro tier at $25/month includes 100 credits; the free tier gives roughly 5 per day capped at 30 per month. <span class="chip chip-warn">Indicative</span> Practitioner reports put a three-page CRUD app with authentication and a database at 150–250 credits — more than a full month's Pro allowance. Top-ups run about $10 per 20 credits, roughly double the in-plan rate, and they raise your cap rather than granting a fresh pool.</p>
+      <p>The failure mode people describe is a debugging loop: the AI's fix breaks something adjacent, and each attempt costs credits. This bites hardest on exactly the territory a booking system lives in — payment flows, multi-user state, calendar logic. It bites least on marketing pages. That asymmetry is the argument for keeping Lovable on the marketing side.</p>
+
+      <h3>On Bubble, since you asked specifically</h3>
+      <p>Switching from Lovable to Bubble would make your core problem worse. <span class="chip chip-good">Verified</span> Bubble's 2026 pricing is $29/month for web, $42 with mobile, $59 for both, then $119 Growth and $349 Team. On top of the subscription it meters Workload Units, with overage at $0.30 per 1,000 WU, uncapped by default — every database read, workflow step, API call and page load consumes them. An iCal polling loop and Stripe webhooks are precisely the kind of always-on background work that accumulates WUs quietly.</p>
+      <p>Bubble also has <strong>no source code export</strong>. Leaving means a rebuild from scratch. Lovable, whatever else is true of it, hands you a real TypeScript codebase you can push to GitHub and take elsewhere — which is the strongest argument for not abandoning it.</p>
+      <p>Bubble's one genuine advantage is mobile: <span class="chip chip-good">Verified</span> since June 2025 it publishes real native iOS and Android apps built on React Native, not a WebView wrapper. If native apps were essential, Bubble would deserve a serious look. Section 5 argues they aren't.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose" style="margin-bottom:1.5rem">
+      <span class="eyebrow">4 &middot; The booking engines</span>
+      <h2>What you should actually buy</h2>
+      <p>These are the products that already do the hard half. Pricing here is the least reliable part of this report — see the note below the table.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th class="num">Cost</th>
+            <th class="num">Booking fee</th>
+            <th>Your own Stripe?</th>
+            <th>Fit for one Sydney property</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">OwnerRez</td>
+            <td class="num">~$40/mo</td>
+            <td class="num">None</td>
+            <td>Yes — Stripe &amp; PayPal</td>
+            <td><span class="chip chip-good">Best fit</span> Flat fee, no per-booking cut, deposits and damage holds, e-sign agreements, two-way channel sync. Site templates are plain — pair with your own front end.</td>
+          </tr>
+          <tr>
+            <td class="name">Lodgify</td>
+            <td class="num">$16–59<br>per listing/mo</td>
+            <td class="num">1.9% on entry tier</td>
+            <td>Yes — Stripe, PayPal, Braintree, Authorize.net</td>
+            <td><span class="chip chip-good">Strong</span> Best built-in website builder of the group; embeds into Webflow, Squarespace or Wix without a plugin. Google Vacation Rentals on higher tiers.</td>
+          </tr>
+          <tr>
+            <td class="name">Beds24</td>
+            <td class="num">from ~$10/mo</td>
+            <td class="num">None</td>
+            <td>Yes</td>
+            <td><span class="chip chip-warn">Technical</span> Cheapest and most configurable. Dated interface, steeper setup.</td>
+          </tr>
+          <tr>
+            <td class="name">Smoobu</td>
+            <td class="num">€15–45/mo</td>
+            <td class="num">None</td>
+            <td>Yes</td>
+            <td><span class="chip chip-neutral">Viable</span> Clean, European-centric, flat tiers.</td>
+          </tr>
+          <tr>
+            <td class="name">Hostaway</td>
+            <td class="num">$20–40<br>per listing/mo</td>
+            <td class="num">None</td>
+            <td>Yes</td>
+            <td><span class="chip chip-bad">Over-specified</span> Built for 10–100 property portfolios. Widest integrations, wrong scale.</td>
+          </tr>
+          <tr>
+            <td class="name">Guesty</td>
+            <td class="num">$9–50+<br>per listing/mo</td>
+            <td class="num">None</td>
+            <td>Yes</td>
+            <td><span class="chip chip-bad">Avoid for now</span> Enterprise-oriented, and it retired its small-host tier and migrated those users — a real switching-risk signal.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout" style="margin-top:1.5rem">
+      <span class="eyebrow">Treat these prices as indicative, not quotable</span>
+      Every vendor pricing page in this category blocked automated fetching, so the figures above come from secondary sources. Two conflicts survived and you should resolve them yourself before committing: <strong>(a)</strong> sources disagree on whether Lodgify's 1.9% booking fee disappears at the ~$40 Professional tier or only at the ~$103 Ultimate tier; <strong>(b)</strong> Guesty Lite is described both as free for up to three listings and as ~$34 per listing. Check <span style="font-family:var(--mono);font-size:0.85em">lodgify.com/pricing</span> and <span style="font-family:var(--mono);font-size:0.85em">ownerrez.com/pricing</span> directly.
+      <br><br>
+      Also worth knowing: the "best channel manager 2026" roundups that dominate these search results are among the most heavily affiliate-monetised content in the STR niche, and Lodgify runs a recurring-commission partner programme. Verification specifically rejected one such article's "Lodgify is the clear winner" verdict as unsupported. The pricing in those posts is probably roughly right; the rankings are advertising.
+    </div>
+
+    <div class="prose" style="margin-top:2rem">
+      <h3>One technical warning about embedding</h3>
+      <p>When you connect a bought booking engine to your own site, <strong>how</strong> you embed it changes the SEO outcome. Avoid dropping the engine into an <span style="font-family:var(--mono);font-size:0.85em">iframe</span>: search engines treat iframe content as separate from the host page, it breaks the browser back button, it degrades screen-reader navigation, and payment forms inside iframes are a documented formjacking target. Prefer a JavaScript widget that renders into the page, or a "Book now" button that opens the engine's own hosted, PCI-compliant checkout. Lodgify's embed is a script-based widget, not an iframe, which is the right shape.</p>
+    </div>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">5 &middot; The uncomfortable part</span>
+    <h2>Why the native apps are a mistake</h2>
+    <p>You asked for real App Store and Play Store listings and said budget is flexible if the ROI works. Here's the honest assessment: for a single-property direct booking business, the ROI doesn't work, and the reason isn't cost.</p>
+    <p><strong>Guests will not install your app.</strong> Someone books a Sydney holiday rental once, stays a week, and leaves. Asking them to install an app before booking adds friction to the exact conversion step you're trying to protect. The competitor isn't Airbnb's app — it's your own mobile web page, which is one tap away and always wins for first-time visitors. App Store search will send you approximately zero discovery traffic for one property.</p>
+    <p>There's also a real approval risk. <span class="chip chip-good">Verified</span> Apple's live App Review Guidelines — fetched directly on 4 August 2026 — state under 4.2 Minimum Functionality:</p>
+    <blockquote>"Your app should include features, content, and UI that elevate it beyond a repackaged website. If your app is not particularly useful, unique, or 'app-like,' it doesn't belong on the App Store."</blockquote>
+    <p>And 4.2.2: <em>"Other than catalogs, apps shouldn't primarily be marketing materials, advertisements, web clippings, content aggregators, or a collection of links."</em> A wrapped booking site is squarely the thing this clause exists to catch. Rejections under 4.2.2 were still being issued and appealed on Apple's own developer forums as recently as April 2026, including against apps whose developers insisted they weren't wrappers and had shipped genuine native features. Apple doesn't tell you what would satisfy the rule, and doesn't resolve appeals publicly.</p>
+    <p>Against that, the wrapper vendors report high success. <span class="chip chip-warn">Vendor claim</span> Median.co states it has published over 4,000 apps and maintained a 100% approval rate as of July 2026, and sells a full-service submission with an approval guarantee. That's a motivated source, but it's not nothing — it suggests a competently configured wrapper with push notifications and native navigation usually does get through. The risk is real but not prohibitive.</p>
+
+    <h3>If you want them anyway</h3>
+    <p>The path, cheapest to most expensive:</p>
+    <ul class="tight">
+      <li><strong>PWA</strong> — free. Installable to the home screen, works offline, keeps all your SEO and structured data intact. No store listing. This captures ~90% of the practical benefit for ~0% of the cost.</li>
+      <li><strong>Capacitor</strong> — free and open source. Export your Lovable project to GitHub, wrap it, build in Xcode and Android Studio. Real native APIs available. Requires you to manage signing, builds and store submission yourself.</li>
+      <li><strong>Natively or Median.co</strong> — <span class="chip chip-warn">Indicative</span> roughly $32/month self-serve, or a few thousand dollars for full-service submission. Figures came from a competitor comparison page, so verify directly.</li>
+      <li><strong>Store fees regardless</strong> — Apple Developer Program $99/year, Google Play $25 one-time.</li>
+    </ul>
+    <p>The one case where an app earns its keep is the <em>operations</em> side, not the guest side — the StaffRollCall pattern. Cleaners and turnover staff use a tool repeatedly, benefit from push notifications and offline access, and won't mind installing something. Even there, a PWA usually suffices.</p>
+  </section>
+
+  <section>
+    <div class="prose" style="margin-bottom:1.5rem">
+      <span class="eyebrow">6 &middot; Stacks and costs</span>
+      <h2>Four ways to assemble this</h2>
+      <p>Monthly, excluding Stripe's processing fees, which you pay on any path. AUD figures assume roughly A$1.50 to US$1 — adjust to the current rate.</p>
+    </div>
+    <div class="stacks">
+      <div class="stack pick">
+        <span class="chip chip-good">Recommended</span>
+        <h3>Built site + bought engine</h3>
+        <div class="price">$65<small> /mo &middot; ≈A$100</small></div>
+        <ul>
+          <li>Lovable Pro or Framer for the marketing site — $25</li>
+          <li>OwnerRez booking engine — $40</li>
+          <li>Your own Stripe AU account, no middleman</li>
+          <li>Domain ~$2</li>
+        </ul>
+        <p class="footnote">You own the design and the code. Guest data and booking logic live in a mature product. Best balance of control, cost and risk.</p>
+      </div>
+
+      <div class="stack">
+        <span class="chip chip-neutral">Budget</span>
+        <h3>All-in-one</h3>
+        <div class="price">$16<small> /mo &middot; ≈A$25</small></div>
+        <ul>
+          <li>Lodgify Starter, site builder included</li>
+          <li>Plus 1.9% of each direct booking</li>
+          <li>Your own Stripe account</li>
+        </ul>
+        <p class="footnote">Live in a weekend, least control over design and SEO. The percentage fee is the catch — see the break-even below.</p>
+      </div>
+
+      <div class="stack">
+        <span class="chip chip-warn">Only if apps are mandatory</span>
+        <h3>Wrapped for the stores</h3>
+        <div class="price">$105<small> /mo &middot; ≈A$160</small></div>
+        <ul>
+          <li>Recommended stack — $65</li>
+          <li>Median.co or Natively wrapper — ~$32</li>
+          <li>Apple $99/yr + Google $25 once</li>
+        </ul>
+        <p class="footnote">Adds store listings and Guideline 4.2 risk. Little expected return for one property.</p>
+      </div>
+
+      <div class="stack">
+        <span class="chip chip-bad">Not advised</span>
+        <h3>Build everything yourself</h3>
+        <div class="price">$50<small> /mo + your time</small></div>
+        <ul>
+          <li>Lovable Pro — $25</li>
+          <li>Supabase — $25</li>
+          <li>Booking logic, iCal sync, deposits: yours to build</li>
+        </ul>
+        <p class="footnote">Cheapest on paper, most expensive in reality. You inherit double-booking risk, RLS configuration, and Privacy Act exposure on guest data.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:1.75rem">
+      <span class="eyebrow">The Lodgify break-even, since it's the one real fork</span>
+      Lodgify's entry tier costs US$16/month plus 1.9% per booking; the next tier up removes the fee for about US$40/month. The extra US$24/month is US$288/year, roughly A$430. That's covered once 1.9% of your direct bookings exceeds it — around <strong>A$23,000 a year in direct revenue</strong>. Below that, stay on Starter and pay the percentage. Above it, upgrade. <em>Conditional on the tier-boundary conflict flagged in section 4 resolving in favour of Professional.</em>
+    </div>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">7 &middot; Sydney specifics</span>
+    <h2>What NSW adds to the build</h2>
+    <p class="footnote" style="margin-bottom:0.5rem"><span class="chip chip-warn">Indicative</span> The compliance source for this section was inaccessible to automated fetching. Verify against the NSW Planning Portal and the ATO before acting — these are the shape of the requirements, not legal advice.</p>
+    <ul class="tight">
+      <li><strong>STRA registration.</strong> Properties register on the NSW Planning Portal — reportedly $65 for the first 12 months, then about $25/year. You receive an STRA Property ID.</li>
+      <li><strong>Display the Property ID.</strong> It must appear on every listing. Design a slot for it in your site footer and on the booking confirmation from day one, rather than retrofitting.</li>
+      <li><strong>The 180-day cap.</strong> Non-hosted short-term rentals in Greater Sydney are capped at 180 days per registration period. Bookings of 21 or more consecutive nights are excluded from the count.</li>
+      <li><strong>Fire Safety Standard.</strong> An attestation covering smoke alarms, an evacuation diagram, and an extinguisher and fire blanket.</li>
+      <li><strong>GST.</strong> Generally doesn't apply to residential short-term rental income unless you cross the $75,000 turnover threshold or the property qualifies as commercial residential. Confirm with your accountant.</li>
+      <li><strong>Strata and council rules</strong> sit on top of all of the above and can be stricter.</li>
+    </ul>
+
+    <div class="callout" style="margin-top:1.5rem">
+      <span class="eyebrow">The one thing genuinely worth building</span>
+      No PMS in the comparison — not OwnerRez, not Lodgify, not Hostaway — counts your non-hosted nights against the NSW 180-day cap or handles the 21-night exclusion. Every operator tracks this in a spreadsheet, and getting it wrong has regulatory consequences.
+      <br><br>
+      That is a real, small, well-specified problem: read bookings from the PMS API, classify hosted versus non-hosted, exclude stays of 21+ consecutive nights, show nights remaining, and warn as you approach the cap. It's the same shape as StaffRollCall, it holds no payment data, and it's exactly what Lovable is good at. If you want to keep building, <strong>build that</strong> — not the booking engine.
+    </div>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">8 &middot; Sequence</span>
+    <h2>What to do next</h2>
+    <ul class="tight">
+      <li><strong>This week.</strong> Verify the two pricing conflicts on the vendors' own pages, then start a free trial of OwnerRez and Lodgify simultaneously. Connect one to your existing Airbnb calendar and watch the sync behave for a few days. This tells you more than any comparison article.</li>
+      <li><strong>Then.</strong> Confirm your Stripe AU account connects cleanly to whichever engine you pick, and test a real booking end to end with a small refunded charge.</li>
+      <li><strong>Then.</strong> Build the marketing site — in Lovable if you enjoy it, Framer if you want it to look better with less effort. Location and neighbourhood pages are where the organic traffic comes from, not the home page. Add <span style="font-family:var(--mono);font-size:0.85em">LodgingBusiness</span> JSON-LD structured data in the page head.</li>
+      <li><strong>Then.</strong> Ship it as a PWA. Measure direct bookings for two quarters.</li>
+      <li><strong>Only then</strong> revisit native apps, with real conversion data instead of a hypothesis. If direct bookings aren't growing, an App Store listing was never the bottleneck.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="prose" style="margin-bottom:1rem">
+      <span class="eyebrow">Appendix</span>
+      <h2>Method and its limits</h2>
+    </div>
+    <div class="prose">
+      <p>Five parallel search angles, 48 sources fetched, claims extracted and then attacked by three independent verifiers each, with two of three refutations required to kill a claim. 73 claims went through verification; 13 survived intact.</p>
+      <p>That survival rate looks alarming and mostly isn't. Roughly a third of the refutations were "could not independently confirm" rather than "found to be false" — this environment's proxy returned HTTP 403 for a large share of vendor pricing pages, review aggregators and industry blogs. Where a claim is marked <span class="chip chip-warn">Indicative</span> above, it means the underlying number is probably right but rests on a single secondary source.</p>
+      <p>Three refutations were substantive and changed the report's conclusions: the Lovable SSR reversal, the Lodgify-forces-its-own-payment-rail claim (false — it supports your own Stripe account), and the affiliate-driven "Lodgify is the clear winner" ranking.</p>
+    </div>
+
+    <div style="margin-top:1.5rem">
+      <details>
+        <summary>Claims verified against primary sources</summary>
+        <ul class="tight">
+          <li>Apple App Review Guidelines 4.2 and 4.2.2 — fetched from developer.apple.com, 4 August 2026.</li>
+          <li>CVE-2025-48757 — GitHub Advisory GHSA-773x-pxjg-gxgx, CVSS 9.3, published 30 May 2025; figures trace to Matt Palmer's original disclosure.</li>
+          <li>Lovable Discoverability release, 13 May 2026 — TanStack Start SSR for new projects, automatic pre-rendering for existing ones.</li>
+          <li>Bubble 2026 pricing and Workload Unit overage at $0.30/1,000 — Bubble's own manual, corroborated across six independent write-ups.</li>
+          <li>Bubble native mobile on React Native — Bubble's own forum and June 2025 announcement.</li>
+          <li>Lodgify supports Stripe, PayPal, Braintree and Authorize.net — Lodgify's own payment documentation.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Claims rejected — do not rely on these if you read them elsewhere</summary>
+        <ul class="tight">
+          <li>"Lovable sites can't be indexed by Google." Obsolete since 13 May 2026.</li>
+          <li>"You need a paid pre-rendering service for a Lovable site." No longer true.</li>
+          <li>"Google takes 9x longer to index JavaScript pages; 40% lower indexation." Stale; median crawl-to-render is around five seconds.</li>
+          <li>"Lodgify processes payments through Lodgify Payments rather than your Stripe account." False.</li>
+          <li>"Lodgify is the clear winner for hosts with 1–3 properties." Unsupported affiliate-listicle ranking.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Known gaps</summary>
+        <ul class="tight">
+          <li>FlutterFlow pricing and current native capability were not independently verified — the row in section 3 is from general knowledge, not this research.</li>
+          <li>NSW STRA figures and the GST threshold come from a commercial blog that could not be fetched. Confirm on the NSW Planning Portal and with the ATO.</li>
+          <li>Median.co and Natively pricing came from a competitor's comparison page and is motivated. Verify on their own sites.</li>
+          <li>No hands-on testing was performed. Everything here is documentary research; the trials proposed in section 8 will beat all of it.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+</div>
