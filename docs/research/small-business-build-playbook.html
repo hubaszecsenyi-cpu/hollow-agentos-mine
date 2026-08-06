@@ -215,6 +215,8 @@
   .callout.danger { border-left-color: var(--clay); }
   .callout .eyebrow { display: block; margin-bottom: 0.45rem; color: var(--blue); }
   .callout.danger .eyebrow { color: var(--clay); }
+  .two-col { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin: 1.2rem 0; }
+  .two-col .callout ul { margin: 0; padding-left: 1.05rem; display: flex; flex-direction: column; gap: 0.35rem; }
 
   blockquote {
     margin: 0; padding: 0.7rem 1.15rem; border-left: 2px solid var(--line);
@@ -240,7 +242,7 @@
 <div class="wrap">
 
   <header class="masthead">
-    <span class="eyebrow">Field guide &middot; Revision 1 &middot; August 2026</span>
+    <span class="eyebrow">Field guide &middot; Revision 2 &middot; August 2026</span>
     <h1>The small business build playbook</h1>
     <p class="standfirst">Which tool to reach for when a small business needs custom software — web apps, mobile apps, internal tools, public sites. Written for someone who prompts AI fluently and doesn't write code, and who has to live with the consequences of the choice.</p>
   </header>
@@ -296,7 +298,7 @@
           <li>Content changes often, logic is thin</li>
           <li>No login for most visitors</li>
         </ul>
-        <p class="pick"><strong>Reach for:</strong> Webflow or Framer. Lovable is now viable too — it gained real server-side rendering in May 2026, which was the thing that used to disqualify it here.</p>
+        <p class="pick"><strong>Reach for:</strong> Webflow. Lovable is now viable too — it gained real server-side rendering in May 2026, which was the thing that used to disqualify it here.</p>
       </div>
       <div class="card">
         <span class="label">Archetype B</span>
@@ -307,7 +309,7 @@
           <li>CRUD, forms, dashboards, approvals</li>
           <li>Ugly-but-working is acceptable</li>
         </ul>
-        <p class="pick"><strong>Reach for:</strong> Lovable, Bolt or Replit for something bespoke; Softr, Glide or Noloco over Airtable when the data model is simple; Retool for data-heavy admin.</p>
+        <p class="pick"><strong>Reach for:</strong> Base44 when you want database, login and email handled for you; Lovable, Bolt or Replit when you want the code to stay portable.</p>
       </div>
       <div class="card">
         <span class="label">Archetype C</span>
@@ -329,7 +331,7 @@
           <li>Store listing actually matters</li>
           <li>Offline, background, or hardware access</li>
         </ul>
-        <p class="pick"><strong>Reach for:</strong> FlutterFlow, Bubble's mobile track, or Expo. But first read the mobile section — most requests that arrive here belong in A or B.</p>
+        <p class="pick"><strong>Reach for:</strong> FlutterFlow or Expo. But first read the mobile section — most requests that arrive here belong in A or B.</p>
       </div>
     </div>
   </section>
@@ -370,12 +372,12 @@
             <td>Same class as Lovable. v0 and Bolt are front-end first.</td>
           </tr>
           <tr>
-            <td class="name">Bubble</td>
-            <td>B, C, D</td>
-            <td class="num">~$29–350/mo</td>
-            <td>Seat + metered compute</td>
-            <td><span class="chip chip-bad">No export</span></td>
-            <td>Workload units meter every operation and overage is uncapped. Months to learn. Real native apps, though.</td>
+            <td class="name">Base44</td>
+            <td>B</td>
+            <td class="num">~$16–160/mo</td>
+            <td>Two credit pools</td>
+            <td><span class="chip chip-warn">Export ≠ portable</span></td>
+            <td>Backend included, so nothing to wire up. The export needs a replacement backend to run. See ownership.</td>
           </tr>
           <tr>
             <td class="name">Webflow</td>
@@ -386,28 +388,12 @@
             <td>Excellent SEO control. Weak for app logic — don't stretch it.</td>
           </tr>
           <tr>
-            <td class="name">Framer</td>
-            <td>A</td>
-            <td class="num">~$15–25/mo</td>
-            <td>Flat per site</td>
-            <td><span class="chip chip-bad">Limited</span></td>
-            <td>Fastest route to a site that looks designed. Lock-in is real but the asset is cheap to rebuild.</td>
-          </tr>
-          <tr>
-            <td class="name">Softr / Glide / Noloco</td>
-            <td>B</td>
-            <td class="num">~$25–90/mo</td>
-            <td>Seat / per-app</td>
-            <td><span class="chip chip-bad">No</span></td>
-            <td>Superb when the data really is a table. Ceiling arrives abruptly.</td>
-          </tr>
-          <tr>
-            <td class="name">Retool</td>
-            <td>B</td>
-            <td class="num">per-seat, scales</td>
-            <td>Per user</td>
-            <td><span class="chip chip-bad">No</span></td>
-            <td>Internal admin over existing databases. Per-seat cost punishes wide rollouts.</td>
+            <td class="name">Devin</td>
+            <td>A, C, D</td>
+            <td class="num">$20/mo + usage</td>
+            <td>Metered (ACUs)</td>
+            <td><span class="chip chip-good">Total</span> your repo</td>
+            <td>Delegated, not supervised. Bill scales with work attempted, not work completed.</td>
           </tr>
           <tr>
             <td class="name">FlutterFlow</td>
@@ -435,14 +421,47 @@
     <h2>How these tools actually bill you</h2>
     <p>Three billing models, and the difference matters more than the headline price — particularly if you quote clients fixed prices.</p>
     <ul class="tight">
-      <li><strong>Flat subscription</strong> (Webflow, Framer, most site builders). Predictable. Quote with confidence.</li>
+      <li><strong>Flat subscription</strong> (Webflow, most site builders, Claude Code, Cursor). Predictable. Quote with confidence.</li>
       <li><strong>AI credits</strong> (Lovable, Bolt, Replit). You pay per generation attempt, not per result. The failure mode is a debugging loop where each fix breaks something adjacent and every retry costs. A modest app with authentication and a database can consume more than a month's allowance in one build session. Top-ups typically cost roughly double the in-plan rate.</li>
-      <li><strong>Metered compute</strong> (Bubble's workload units). Every database read, workflow step and API call is billed, and overage is uncapped by default. Background work — polling, webhooks, scheduled syncs — accrues cost around the clock whether anyone uses the app or not.</li>
+      <li><strong>Split credit pools</strong> (Base44). Two meters, and they behave differently. Build credits are spent while you develop and stop when you stop. Runtime credits are consumed by the live app every time it sends an email, calls a model or accepts an upload — so the bill tracks your client's usage, not your effort, and it keeps running long after you've handed over.</li>
+      <li><strong>Metered agent time</strong> (Devin's ACUs). You buy the agent's working time, not its output. An ACU is roughly a quarter-hour of active work at somewhere near $2.25, so an hour of Devin sits around $9 whether the attempt succeeded or not. A task the agent misunderstands and grinds at costs the same as one it nails.</li>
     </ul>
     <div class="callout danger">
       <span class="eyebrow">If you bill clients fixed-price</span>
-      Metered compute transfers an unbounded variable cost onto a fixed-price engagement. Either put the subscription in the client's name so the meter is theirs, or price in a ceiling. The same applies to AI credits during the build: a difficult feature can quietly consume the project's entire tooling budget before it works.
+      Any meter transfers an unbounded variable cost onto a fixed-price engagement — but note <em>which side</em> of the handover each one sits on. Build-time meters (AI credits, agent ACUs) threaten your margin during the project and stop when you ship. Runtime meters threaten the client's operating cost forever, and they are the ones to put in the client's name before launch. Price in a ceiling for the first kind; transfer ownership of the second.
     </div>
+  </section>
+
+  <section class="prose">
+    <span class="eyebrow">The other way to use an agent</span>
+    <h2>Devin, and delegated coding</h2>
+    <p>Devin belongs in a different column from everything above it. It isn't a builder you assemble an app in — it's an autonomous engineer that works in a real repository. That puts it in the same family as Claude Code and Cursor, and the family resemblance matters less than the one difference.</p>
+    <p><strong>Claude Code and Cursor are supervised.</strong> They run where you are, you watch each change land, and you interrupt the moment it goes wrong. <strong>Devin is delegated.</strong> You hand it a scoped ticket, it works asynchronously in its own cloud machine with a shell, editor and browser, and it returns a pull request. You review the result, not the process.</p>
+    <p>That single difference sets both the appeal and the risk. Delegation is what lets you run several tasks at once without being present for any of them. It is also what removes the correction step that keeps a supervised agent honest — a misunderstanding at minute two is still being built on at minute forty, and you pay for every one of those minutes.</p>
+
+    <div class="two-col">
+      <div class="callout">
+        <span class="eyebrow">Where it earns its keep</span>
+        <ul class="tight">
+          <li>Work you can specify precisely before it starts — a bug with a clean reproduction, a library upgrade, backfilling test coverage</li>
+          <li>Repetitive changes across many files where the pattern is known</li>
+          <li>An existing codebase with conventions to imitate</li>
+          <li>Queued work you genuinely don't want to sit and watch</li>
+        </ul>
+      </div>
+      <div class="callout danger">
+        <span class="eyebrow">Where it doesn't</span>
+        <ul class="tight">
+          <li>Anything ambiguous. Reported success drops sharply as specification quality drops, and small business requirements arrive vague by default</li>
+          <li>Greenfield projects with no conventions yet established</li>
+          <li>Cross-cutting changes touching many interdependent files</li>
+          <li>Solo operators — review capacity, not writing capacity, is usually the bottleneck, and delegation adds to the side you're already short on</li>
+        </ul>
+      </div>
+    </div>
+
+    <p><strong>The honest verdict for small business work:</strong> Devin is a complement to a supervised agent, not a replacement for one, and it's the harder of the two to justify. It rewards a clear specification and a codebase worth imitating — exactly the two things a new client project doesn't have yet. Reach for it once the project is real, the conventions exist, and the backlog is full of well-defined chores. Not on day one.</p>
+    <p class="footnote"><span class="chip chip-warn">Lower confidence</span> Cognition's own pricing and documentation were unreachable from the research environment. The $20 entry, roughly $2.25 per ACU and the quarter-hour-per-ACU figure are consistent across many secondary sources but unconfirmed at source. Published success rates vary so widely between reviewers — and the widely-quoted SWE-bench figure is from Devin's 2024 launch, not today — that no single number is quoted here. The qualitative pattern, strong on scoped work and weak on ambiguity, is what the sources agree on.</p>
   </section>
 
   <section class="prose">
@@ -474,7 +493,7 @@
     <ol class="tight">
       <li><strong>Capacitor</strong> — free and open source. Wrap your existing web app, get real native APIs, manage builds and signing yourself.</li>
       <li><strong>Median.co or Natively</strong> — paid wrapper services, roughly $30/month self-serve up to low thousands for full-service submission. Median publicly claims a very high approval rate; that's a vendor claim, but it suggests a well-configured wrapper with native navigation and push usually clears review.</li>
-      <li><strong>Rebuild natively</strong> — FlutterFlow, Bubble's mobile track, or Expo. The only option that removes 4.2 risk entirely.</li>
+      <li><strong>Rebuild natively</strong> — FlutterFlow or Expo. The only option that removes 4.2 risk entirely.</li>
       <li><strong>Store fees regardless</strong> — Apple Developer Program $99/year, Google Play $25 one-time.</li>
     </ol>
   </section>
@@ -484,9 +503,14 @@
     <h2>Ownership, lock-in and handover</h2>
     <p>For client work this outranks everything else. You are not only choosing how to build — you are choosing what the client is left holding when the relationship ends, amicably or otherwise.</p>
     <ul class="tight">
-      <li><strong>Real code export</strong> (Lovable, Bolt, Replit, FlutterFlow, Claude Code). The client can be handed a repository. Another developer can continue. You can migrate to a different platform without a rewrite. This is the honest position to be in.</li>
-      <li><strong>No export</strong> (Bubble, Glide, Softr, Retool). The work exists only inside the vendor. If the client stops paying, it stops existing. If they want to leave, it's a rebuild. This can still be the right call for a genuinely internal tool — but say so explicitly, in writing, before you start.</li>
+      <li><strong>Real code export</strong> (Lovable, Bolt, Replit, FlutterFlow, Claude Code, Cursor, Devin). The client can be handed a repository that runs. Another developer can continue. You can move hosts without a rewrite. This is the honest position to be in.</li>
+      <li><strong>Export that isn't portability</strong> (Base44). You can download the code, and it will not run on its own. The front end comes out; the database, authentication and backend logic stay behind the vendor's SDK. Leaving means rebuilding the backend and migrating the live data — the export is a starting point for a migration, not an escape hatch.</li>
+      <li><strong>No export at all.</strong> The work exists only inside the vendor. If the client stops paying, it stops existing. This can still be the right call for a genuinely internal tool — but say so explicitly, in writing, before you start.</li>
     </ul>
+    <div class="callout">
+      <span class="eyebrow">The question that separates the first two</span>
+      Not "can I export the code?" but <strong>"if I export it and the vendor disappears tomorrow, does it run?"</strong> Vendors answer the first question in their marketing. Only the second one matters at handover. The tell is an all-in-one platform: if the database, login and file storage came free with the builder, they are the part you cannot take with you. Base44's export is a genuine convenience and a real head start — third-party SDKs exist specifically to re-point those apps at a self-hosted backend — but it is not the same product as a repository you can deploy anywhere.
+    </div>
     <blockquote>Tell the client which of these they're buying. "You'll own the code" and "you'll own an account" are very different products, and only one of them survives a billing dispute.</blockquote>
     <p>Two practical habits: put SaaS subscriptions in the client's name with you as a collaborator, so nothing dies when your card expires or the engagement ends. And commit generated code to a repository the client controls from day one, not at handover.</p>
   </section>
@@ -529,12 +553,13 @@
     <span class="eyebrow">Reference</span>
     <h2>Ten-second version</h2>
     <ol class="tight">
-      <li>Public site with SEO → Webflow, Framer, or Lovable</li>
-      <li>Internal staff tool → Lovable, Bolt, or Softr over a table</li>
+      <li>Public site with SEO → Webflow or Lovable</li>
+      <li>Internal staff tool → Base44 if you want the backend handled, Lovable or Bolt if you want the code portable</li>
       <li>Customers paying money → buy the engine; build only what's missing</li>
       <li>"We need an app" → PWA until something forces native</li>
-      <li>Client work → code export is non-negotiable</li>
-      <li>Fixed-price engagement → avoid metered compute, or make the meter theirs</li>
+      <li>Client work → code export is non-negotiable, and check the export actually runs without the vendor</li>
+      <li>Fixed-price engagement → cap the build-time meters, hand the runtime meters to the client</li>
+      <li>Delegating to an agent → only for work you could have specified precisely in writing</li>
       <li>Anything holding customer data → do the security pass before launch</li>
     </ol>
   </section>
@@ -551,9 +576,17 @@
           <li>Apple App Review Guidelines 4.2 and 4.2.2 — fetched from developer.apple.com, 4 August 2026.</li>
           <li>CVE-2025-48757 — GitHub Advisory GHSA-773x-pxjg-gxgx, CVSS 9.3, published 30 May 2025.</li>
           <li>Lovable gained server-side rendering on 13 May 2026 (TanStack Start for new projects, automatic pre-rendering for existing ones).</li>
-          <li>Bubble's workload-unit metering and uncapped overage — Bubble's own documentation.</li>
-          <li>Bubble publishes genuine native apps via React Native, not a web view.</li>
-          <li>Bubble has no source-code export.</li>
+          <li>Base44 exports code that depends on its SDK for database, authentication and backend logic. Corroborated across independent migration guides, and evidenced directly by a public drop-in SDK built to re-point Base44 apps at self-hosted Supabase — a tool that would have no reason to exist otherwise.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Devin and Base44 — what could not be confirmed at source</summary>
+        <p>Both vendors' own domains returned 403 from the research environment, as did Cognition's documentation. Everything below rests on secondary sources that agree with each other, which is weaker than a primary source and stronger than a single review.</p>
+        <ul class="tight">
+          <li><strong>Devin pricing</strong> — $20/month entry, roughly $2.25 per ACU, an ACU as approximately fifteen minutes of active work. Consistent across many independent write-ups; unverified at source.</li>
+          <li><strong>Devin performance</strong> — no success rate is quoted in this document, deliberately. Published figures range from the low teens to the high seventies depending on who is measuring and what they measure, and the most-cited SWE-bench number dates from the 2024 launch rather than the current product. Only the qualitative pattern is reported here.</li>
+          <li><strong>Base44 pricing</strong> — five tiers from free to roughly $160/month, split into build and runtime credit pools. Secondary sources only.</li>
+          <li><strong>Base44 ownership</strong> — Wix acquired it in June 2025.</li>
         </ul>
       </details>
       <details>
@@ -563,7 +596,8 @@
       <details>
         <summary>Known gaps</summary>
         <ul class="tight">
-          <li>Retool, Softr, Glide, Noloco and FlutterFlow pricing were not independently researched; those rows draw on general knowledge.</li>
+          <li>FlutterFlow pricing was not independently researched; that row draws on general knowledge.</li>
+          <li><strong>No table-based option remains in the shortlist.</strong> Softr, Glide, Noloco and Retool were removed by request. Base44 covers most internal-tool ground, but if a client's tool genuinely is a spreadsheet with a login on it, the honest answer may be a spreadsheet with a login on it — and this playbook no longer names one. Question two of the triage still applies.</li>
           <li>No hands-on testing. This is documentary research plus judgement, not benchmarks.</li>
           <li>The AI builder market moves fast enough that anything here older than about six months deserves re-checking — the Lovable rendering change invalidated a year of published advice in a single release.</li>
         </ul>
